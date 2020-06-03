@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.IO.Compression;
 using WebApiCompressData.Models;
 
 namespace WebApiCompressData
@@ -20,6 +22,10 @@ namespace WebApiCompressData
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddResponseCompression();
+            services.Configure<BrotliCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Fastest;
+            });
             services.AddDbContext<DatabaseContext>(options =>
             {
                 options.UseSqlite("Data Source = db.db");
